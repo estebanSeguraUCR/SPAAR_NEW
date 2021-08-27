@@ -14,7 +14,7 @@ SPAUTOREGRESSOR  Sparse autoregressor for time series modeling
 # from SpAutoRegressor import SpAutoRegressor
 # from SPARPredictor import SPARPredictor
 # import matplotlib.pyplot as plt
-# data = read_csv('signal_with_anomaly.csv', usecols=[1], engine='python')
+# data = read_csv('../DataSets/signal_with_anomaly.csv', usecols=[1], engine='python')
 # x = data.values
 # mx = x.min()
 # Mx = abs(x-mx).max()
