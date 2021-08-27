@@ -17,7 +17,7 @@ from SpDFTDecoder import SpDFTDecoder
 #rate, data = read('G-208-05.P1_18062020_145112 Axial Ok.wav')
 #rate, datab = read('G-208-05.P2_18062020_145524 Radial Daño.wav')
 data = pd.read_csv('../DataSets/signal_with_anomaly.csv', usecols=[1], engine='python')
-#data = pd.read_csv('ECG2.csv', usecols=[0], engine='python')
+
 
 threshold=.05
 S=2000
