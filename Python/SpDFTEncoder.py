@@ -14,7 +14,7 @@ def SpDFTEncoder(Y,S,L=100,tol=1e-2,delta=1e-2):
     N=int(np.floor(len(Y)/L))
     for j in np.arange(0,N):
         z0 = Y[j*L:((j+1)*L)]
-        J0,y0 = DFTSpSolver(z0,L,tol,delta)
+        J0 = DFTSpSolver(z0,L,tol,delta)[0]
         y.append(fft(z0))
         J.append(J0)
     return J,y
