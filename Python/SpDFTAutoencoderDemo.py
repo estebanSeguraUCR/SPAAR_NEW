@@ -14,8 +14,8 @@ import pandas as pd
 from SpDFTEncoder import SpDFTEncoder
 from SpDFTDecoder import SpDFTDecoder
 
-#rate, data = read('G-208-05.P1_18062020_145112 Axial Ok.wav')
-#rate, datab = read('G-208-05.P2_18062020_145524 Radial Daño.wav')
+#rate, data = read('ReferenceSensorSignal.wav')
+#rate, datab = read('SensorSignalWithAnomaly.wav')
 data = pd.read_csv('../DataSets/signal_with_anomaly.csv', usecols=[1], engine='python')
 
 
