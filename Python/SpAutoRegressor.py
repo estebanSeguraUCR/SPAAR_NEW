@@ -41,9 +41,3 @@ def SpAutoRegressor(x,ssp,sp,pp,L0,tol,delta):
     H1=H[L-1,1:Lh]
     A = lsspsolver(H0.T,H1.T,L,tol,delta)
     return A.T,H1[Lh-L-1:Lh]
-              
-#pp=max(pp,length(xl));
-#y1=DLTIPredictor(A1,xt((end-(L-1)):end),pp);
-#y2=DLTIPredictor(A2,xt((end-(L-1)):end),pp);
-#rmse1=sqrt(sum((y1-xl.').^2)/length(xl));
-#rmse2=sqrt(sum((y2-xl.').^2)/length(xl));
