@@ -42,4 +42,8 @@ def SpAutoRegressor(x,ssp,sp,pp,L0,tol,delta):
     H0=H[:,:(Lh-1)]
     H1=H[L-1,1:Lh]
     A = lsspsolver(H0.T,H1.T,L,tol,delta)
+<<<<<<< HEAD
     return A.T,H1[Lh-L-1:Lh]
+=======
+    return A.T,H1[Lh-L-1:Lh]
+>>>>>>> 506aabc9d33f65b6a1302d9fb568f54028085d30
