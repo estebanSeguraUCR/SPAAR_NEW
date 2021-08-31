@@ -19,11 +19,31 @@ SPAUTOREGRESSOR  Sparse autoregressor for time series modeling
 # x = data.values
 # mx = x.min()
 # Mx = abs(x-mx).max()
-# xs = (x-mx)/Mx
-# A,h = SpAutoRegressor(xs,1/len(xs),.5,1,600,1e-1,1e-1)
-# y = Mx*SPARPredictor(A,h,1800)+mx
-# L0 = int(ceil(.5*len(xs)))
-# plt.plot(x[(L0-600):L0+1800,0]),plt.plot(y)
+# xs = 2*(x-mx)/Mx-1
+# Lag = 300
+# sampling_proportion = 0.3
+# steps = 2400
+# A,h = SpAutoRegressor(xs,1/len(xs),sampling_proportion,1,Lag,1e-1,1e-1)
+# y = Mx*(SPARPredictor(A,h,steps)+1)/2+mx
+# L0 = int(ceil(sampling_proportion*len(xs)))
+# plt.plot(x[(L0-Lag):L0+steps,0]),plt.plot(y)
+# plt.stem(A)
+#
+# from numpy import sin,pi,arange,append
+# t = arange(0,10,.01)
+# t = append(t,10)
+# x = sin(2*pi*t)
+# mx = x.min()
+# Mx = abs(x-mx).max()
+# xs = 2*(x-mx)/Mx-1
+# Lag = 30
+# sampling_proportion = 0.1
+# steps = 880
+# A,h = SpAutoRegressor(xs,1/len(xs),sampling_proportion,1,Lag,1e-1,1e-1)
+# y = Mx*(SPARPredictor(A,h,steps)+1)/2+mx
+# L0 = int(ceil(sampling_proportion*len(xs)))
+# plt.plot(x[(L0-Lag):L0+steps]),plt.plot(y)
+# plt.stem(A)
 def SpAutoRegressor(x,ssp,sp,pp,L0,tol,delta):
     from numpy import ceil,floor,max,min,asmatrix
     from scipy.linalg import hankel
