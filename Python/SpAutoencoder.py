@@ -24,7 +24,7 @@ hw = W.T@h
 tw  = W.T@t
 plot(W@hw),plot(h)
 show()
-plot(W@hw),plot(h)
+plot(W@tw),plot(t)
 show()
 stem(abs(hw))
 show()
