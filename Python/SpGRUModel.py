@@ -36,7 +36,7 @@ def SpGRUModel(data,Lag,sp,nn,ep,spp = 0.1):
     Xt = reshape(Xt, (Xt.shape[0], 1, Xt.shape[1]))
     
     TS_Model = Sequential([
-        GRU(nn, input_shape=(1, Lag),dropout=0.3,recurrent_dropout=0.3),
+        GRU(nn, input_shape=(1, Lag),dropout=spp,recurrent_dropout=spp),
         Dense(1)
         ])
         
