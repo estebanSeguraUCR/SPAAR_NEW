@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-Created on Thu Sep  2 17:31:47 2021
 Created on Wed Mar 31 02:57:52 2021
-DFTSPSOLVER DFT based sparse linear regression solver
+LAGESTIMATE ACF-FFT based sparse lag estimator
    Code by Fredy Vides
-   For Paper, "Computing Sparse Autoencoders and Autoregressors for Signal Identification"
+   For Paper, "Computing Sparse Semilinear Models for Approximately Eventually Periodic Signals"
    by F. Vides
 @author: Fredy Vides
-@author: doctor
 """
 def LagEstimate(data,L0):
     from statsmodels.tsa.stattools import acf 

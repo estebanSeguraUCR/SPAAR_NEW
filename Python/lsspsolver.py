@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Created on Wed Mar 31 02:57:52 2021
 LSSPSOLVER  Sparse linear least squares solver
    Code by Fredy Vides
-   For Paper, "Computing sparse autoencoders and autoregressors for signal
-   identification"
+   For Paper, "Computing Sparse Semilinear Models for Approximately Eventually Periodic Signals"
    by F. Vides
 @author: Fredy Vides
 """

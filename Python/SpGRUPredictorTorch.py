@@ -6,19 +6,21 @@ SPGRUPREDICTOR GRU based sparse predictor
    by F. Vides
 @author: Fredy Vides
 """
-def SpGRUPredictor(data,model,h,N):
+def SpGRUPredictorTorch(data,model,h,N):
     from numpy import append,reshape
+    from torch import FloatTensor
     Lag = len(h)
     md = data.min()
     Md = abs(data - md).max()
     X = []
     x0 = []
     X = h
-    x0 = reshape(h.copy(),(1,1,Lag))
+    x0 = FloatTensor(reshape(h.copy(),(1,1,Lag)))
     for j in range(N):
         x = model(x0)
-        x0[:1,:,:][0][0][:-1]=x0[:1,:,:][0][0][1:]
-        x0[:1,:,:][0][0][-1]=x
-        X = append(X,x)
-    X = Md*X+md    
+        xc = x0.clone()
+        x0[0][0][:-1] = xc[0][0][1:]
+        x0[0][0][-1]=x.detach()
+        X = append(X,x.detach().numpy()[0][0])
+    X = Md*X+md
     return X
