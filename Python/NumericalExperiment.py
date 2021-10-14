@@ -158,12 +158,15 @@ def NumericalExperiment(experiment_number):
     z = W0[0]*y+W0[1]*X+W0[2]*X1
     fig_0,axs_0 = subplots(2,2)
     axs_0[0,0].plot(data),axs_0[0,0].plot(z,'.-')
+    axs_0[0,0].legend(['reference','identification'],loc = 'lower left')
     axs_0[0,1].semilogy(abs(data-z),'b.-')
     axs_0[0,1].semilogy(abs(predictions-z),'r.-')
     axs_0[0,1].grid(True)
     axs_0[0,1].legend(['SpARGRU','AR'])
     axs_0[1,0].stem(A)
     axs_0[1,1].stem(B)
+    print("nnz(A): ",count_nonzero(A))
+    print("nnz(B): ",count_nonzero(B))
     
     fig_1,axs_1 = subplots(2,2)
     axs_1[0,0].plot(xt,yt,'b')
