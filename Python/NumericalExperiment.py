@@ -183,8 +183,8 @@ def NumericalExperiment(experiment_number):
     axs_1[1,1].axis('equal')
     show()
     
-    fig_0.savefig('fig_results_summary_0_'+str(experiment_number)+'.eps',dpi=600,format='eps')
-    fig_1.savefig('fig_results_summary_1_'+str(experiment_number)+'.eps',dpi=600,format='eps')
+    #fig_0.savefig('fig_results_summary_0_'+str(experiment_number)+'.eps',dpi=600,format='eps')
+    #fig_1.savefig('fig_results_summary_1_'+str(experiment_number)+'.eps',dpi=600,format='eps')
     rmse_0 = sqrt(mean_squared_error(data[Lag:], z[Lag:]))
     rmse_1 = sqrt(mean_squared_error(data[Lag:], predictions[Lag:]))
     print('SpARGRU RMSE: %.10f' %rmse_0)
