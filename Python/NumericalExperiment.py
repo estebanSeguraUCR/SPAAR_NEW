@@ -36,11 +36,11 @@ def NumericalExperiment(experiment_number):
         tol = 5e-3
         data = read_csv(url)
         data = data.values[1,:]
-    elif experiment_number == 3:
+    elif experiment_number == 3.1:
         url = "https://raw.githubusercontent.com/numenta/NAB/master/data/artificialNoAnomaly/art_daily_no_noise.csv"
         data = read_csv(url, usecols=[1])
         data = data.values[:,0]
-    elif experiment_number >= 4:
+    elif experiment_number >= 3.2:
         url = "https://raw.githubusercontent.com/numenta/NAB/master/data/artificialNoAnomaly/art_daily_small_noise.csv"
         data = read_csv(url, usecols=[1])
         data = data.values[:,0]
