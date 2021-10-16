@@ -70,7 +70,7 @@ def NumericalExperiment(experiment_number):
     train, test = Xs[:L0], Xs[L0:]
     model = AutoReg(train, lags=Lag, old_names=False)
     model_fit = model.fit()
-    B = model_fit.params[1:]
+    B = fliplr(reshape(model_fit.params[1:],(1,Lag)))
     # Using sparse autoregressor
     A,h_0 = SpAutoRegressor(xs,1/len(xs),sampling_proportion,1,Lag,delta,tol)
     # Using TensorFlow GRU RNN
@@ -164,9 +164,9 @@ def NumericalExperiment(experiment_number):
     axs_0[0,1].grid(True)
     axs_0[0,1].legend(['SpARGRU','AR'])
     axs_0[1,0].stem(A)
-    axs_0[1,1].stem(B)
+    axs_0[1,1].stem(B[0,:])
     print("nnz(A): ",count_nonzero(A))
-    print("nnz(B): ",count_nonzero(B))
+    print("nnz(B): ",count_nonzero(B[0,:]))
     
     fig_1,axs_1 = subplots(2,2)
     axs_1[0,0].plot(xt,yt,'b')
