@@ -38,7 +38,7 @@ def NumericalExperiment(experiment_number):
         T = 16
     elif experiment_number == 2:
         url = "https://raw.githubusercontent.com/FredyVides/SPAAR/main/DataSets/NLOscillatorSignal.csv"
-        tol = 5e-3
+        tol = 9e-3
         data = read_csv(url)
         data = data.values[1,:]
         Lag = LagEstimate(data.copy(),10)
@@ -106,7 +106,7 @@ def NumericalExperiment(experiment_number):
     X1 = SpGRUPredictorTorch(data.copy(),TS_Model_1,h_1.copy(),steps)
     
     # Extract approximately periodic component from the approximate spectra
-    threshold = delta
+    threshold = 2*delta/Md
     C0 = zeros((Lag,Lag))
     for k in range(Lag-1):
         C0[k,k+1]=1
@@ -120,10 +120,10 @@ def NumericalExperiment(experiment_number):
     yt = sin(2*pi*t)
     
     if experiment_number == 1:
-        h01 = data[Lag:2*Lag].copy()
+        h01 = xs[Lag:2*Lag].copy()
         h02 = h01.copy()
     elif experiment_number != 1:
-        h01 = data[:Lag].copy()
+        h01 = xs[:Lag].copy()
         h02 = h01.copy()
     
     h1 = []
