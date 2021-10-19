@@ -26,40 +26,52 @@ def NumericalExperiment(experiment_number):
     
     delta = 1e-1
     tol = 1e-1
+    sampling_proportion = 0.5
     if experiment_number <= 1:
         tol = 4e-2
-        url = "https://raw.githubusercontent.com/FredyVides/SPAAR/main/DataSets/AlmostPeriodicSignal.csv"
+        url = "https://raw.githubusercontent.com/FredyVides/SPAAR/main/DataSets/VortexSheddingSignal.csv"
         data = read_csv(url)
-        data = data.values[0,:]
+        data = data.values[:,0]
+        Lag = LagEstimate(data.copy(),215)
+        L0 = int(ceil(sampling_proportion*len(data)))
+        L0_AR = int(ceil(0.9*len(data)))
+        T = 16
     elif experiment_number == 2:
         url = "https://raw.githubusercontent.com/FredyVides/SPAAR/main/DataSets/NLOscillatorSignal.csv"
         tol = 5e-3
         data = read_csv(url)
         data = data.values[1,:]
+        Lag = LagEstimate(data.copy(),10)
+        L0 = int(ceil(sampling_proportion*len(data)))
+        L0_AR = L0
+        T = Lag
     elif experiment_number == 3.1:
         url = "https://raw.githubusercontent.com/numenta/NAB/master/data/artificialNoAnomaly/art_daily_no_noise.csv"
         data = read_csv(url, usecols=[1])
         data = data.values[:,0]
+        Lag = LagEstimate(data.copy(),10)
+        L0 = int(ceil(sampling_proportion*len(data)))
+        L0_AR = L0
+        T = Lag
     elif experiment_number >= 3.2:
         url = "https://raw.githubusercontent.com/numenta/NAB/master/data/artificialNoAnomaly/art_daily_small_noise.csv"
         data = read_csv(url, usecols=[1])
         data = data.values[:,0]
+        Lag = LagEstimate(data.copy(),10)
+        L0 = int(ceil(sampling_proportion*len(data)))
+        L0_AR = L0
+        T = Lag
         
-    sampling_proportion = 0.5
-    Lag = LagEstimate(data.copy(),10)
     nn = 16
     ep = 60
     md = data.min()
     Md = abs(data - md).max()
     steps = len(data)-Lag
+    steps_AR = len(data)-1
     spp = 1e-5
     
     x = data.copy()
-    mx = x.min()
-    Mx = abs(x-mx).max()
-    xs = 2*(x-mx)/Mx-1
-    
-    L0 = int(ceil(sampling_proportion*len(xs)))
+    xs = 2*(x-md)/Md-1
     
     # Compute Models
     
@@ -67,7 +79,7 @@ def NumericalExperiment(experiment_number):
     ss=1
     Xs = xs.copy()
     Xs = Xs[:len(Xs):ss]
-    train, test = Xs[:L0], Xs[L0:]
+    train, test = Xs[:L0_AR], Xs[L0_AR:]
     model = AutoReg(train, lags=Lag, old_names=False)
     model_fit = model.fit()
     B = fliplr(reshape(model_fit.params[1:],(1,Lag)))
@@ -83,10 +95,10 @@ def NumericalExperiment(experiment_number):
     
     # Compute predictions
     # With the sparse autoregressor
-    y = Mx*(SPARPredictor(A,h_0,steps)+1)/2+mx
+    y = Md*(SPARPredictor(A,h_0,steps)+1)/2+md
     # With the standard autoregressor
-    predictions = model_fit.predict(Lag, end=len(data)-1, dynamic=False)
-    predictions = Mx*(predictions+1)/2+mx
+    predictions = model_fit.predict(Lag, end=steps_AR, dynamic=False)
+    predictions = Md*(predictions+1)/2+md
     predictions = append(data[:Lag],predictions)
     # With the TensorFlow GRU model
     X = SpGRUPredictor(data.copy(),TS_Model,h.copy(),steps)
@@ -107,8 +119,12 @@ def NumericalExperiment(experiment_number):
     xt = cos(2*pi*t)
     yt = sin(2*pi*t)
     
-    h01 = data[:Lag].copy()
-    h02 = h01.copy()
+    if experiment_number == 1:
+        h01 = data[Lag:2*Lag].copy()
+        h02 = h01.copy()
+    elif experiment_number != 1:
+        h01 = data[:Lag].copy()
+        h02 = h01.copy()
     
     h1 = []
     h2 = []
@@ -139,7 +155,7 @@ def NumericalExperiment(experiment_number):
     l0,_ = eig(C00)
     l1,_ = eig(C01)
     
-    for k in range(Lag-1):
+    for k in range(T-1):
         D00 = D00@C00
         D01 = D01@C01
         
@@ -159,8 +175,8 @@ def NumericalExperiment(experiment_number):
     fig_0,axs_0 = subplots(2,2)
     axs_0[0,0].plot(data),axs_0[0,0].plot(z,'.-')
     axs_0[0,0].legend(['reference','identification'],loc = 'lower left')
-    axs_0[0,1].semilogy(abs(data-z),'b.-')
-    axs_0[0,1].semilogy(abs(predictions-z),'r.-')
+    axs_0[0,1].semilogy(abs(data[Lag:]-z[Lag:len(data)]),'b.-')
+    axs_0[0,1].semilogy(abs(predictions[Lag:len(data)]-data[Lag:]),'r.-')
     axs_0[0,1].grid(True)
     axs_0[0,1].legend(['SpARS','AR'])
     axs_0[1,0].stem(A)
@@ -187,7 +203,7 @@ def NumericalExperiment(experiment_number):
     #fig_0.savefig('fig_results_summary_0_'+str(experiment_number)+'.png',dpi=600,format='png')
     #fig_1.savefig('fig_results_summary_1_'+str(experiment_number)+'.eps',dpi=600,format='eps')
     #fig_1.savefig('fig_results_summary_1_'+str(experiment_number)+'.png',dpi=600,format='png')
-    rmse_0 = sqrt(mean_squared_error(data[Lag:], z[Lag:]))
-    rmse_1 = sqrt(mean_squared_error(data[Lag:], predictions[Lag:]))
+    rmse_0 = sqrt(mean_squared_error(data[Lag:], z[Lag:len(data)]))
+    rmse_1 = sqrt(mean_squared_error(data[Lag:], predictions[Lag:len(data)]))
     print('SpARS RMSE: %.10f' %rmse_0)
     print('AR RMSE: %.10f' %rmse_1)
